@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "649038818273",
+    "project_id": "online-veiling-f6f2d",
+    "storage_bucket": "online-veiling-f6f2d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:649038818273:android:49dae894719e640c0880a0",
+        "android_client_info": {
+          "package_name": "com.example.online_veiling"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvW-ewntgo71LMwsVllusPIjVBR3mjU8g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
