@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,6 +32,21 @@ class _Signup_ScreenState extends State<Signup_Screen> {
   final contactController= TextEditingController();
   final passwordController= TextEditingController();
 
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  // Function to add user information to Firestore
+  Future<void> addUserToFirestore( String name, String email) async {
+    try {
+      await _firestore.collection('Users').doc(email).set({
+        'name': name,
+        'email': email,
+        // Add other fields if needed
+      });
+    } catch (e) {
+      debugPrint('Error adding user to Firestore: $e');
+    }
+  }
+
   FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
@@ -41,25 +57,29 @@ class _Signup_ScreenState extends State<Signup_Screen> {
     passwordController.dispose();
   }
 
-  void signup(){
+  void signup() async {
     setState(() {
       loading = true;
     });
-    _auth.createUserWithEmailAndPassword(
-        email: emailController.text.toString(),
-        password: passwordController.text.toString()).then((value){
-      Utilities().toastMessage(value.user!.email.toString());
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>Post_Screen()));
+
+    try {
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+          email: emailController.text.toString(),
+          password: passwordController.text.toString());
+
+      // Update the user's display name
+      await userCredential.user?.updateProfile(displayName: nameController.text);
+
+      Utilities().toastMessage(userCredential.user!.email.toString());
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Post_Screen()));
+    } on FirebaseAuthException catch (e) {
+      debugPrint(e.message);
+      Utilities().toastMessage(e.message ?? 'Sign up failed');
+    } finally {
       setState(() {
         loading = false;
       });
-    }).onError((error, stackTrace){
-      debugPrint(error.toString());
-       Utilities().toastMessage(error.toString());
-      setState(() {
-        loading = false;
-      });
-    });
+    }
   }
 
   @override
@@ -115,12 +135,14 @@ class _Signup_ScreenState extends State<Signup_Screen> {
                                       color: Theme.of(context).primaryColor,
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                        borderSide:
-                                        BorderSide(color: Theme.of(context).primaryColor),
+                                        borderSide: BorderSide(color: Theme.of(context).primaryColor),
                                         borderRadius: BorderRadius.circular(10)),
+                                    errorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.red),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
                                     enabledBorder: OutlineInputBorder(
-                                        borderSide:
-                                        BorderSide(color: Theme.of(context).primaryColor),
+                                        borderSide: BorderSide(color: Theme.of(context).primaryColor),
                                         borderRadius: BorderRadius.circular(10))),
                                 validator: (value){
                                   if(value!.isEmpty){
@@ -239,6 +261,7 @@ class _Signup_ScreenState extends State<Signup_Screen> {
                       onTap: (){
                       if(_formKey.currentState!.validate()){
                         signup();
+                        addUserToFirestore(nameController.text, emailController.text);
                       }
                     },),
                     SizedBox(

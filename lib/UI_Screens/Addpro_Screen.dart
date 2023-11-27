@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dotted_border/dotted_border.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -31,8 +31,12 @@ class _addproductState extends State<addproduct> {
   bool isUploaded = false;
   bool isButtonEnabled = true;
 
+  String userEmail = '';
   String imageUrl = '';
   File? selectedImage;
+
+  final auth = FirebaseAuth.instance;
+  User? _user;
 
   void resetFormFields() {
     _controllertitle.clear();
@@ -45,6 +49,21 @@ class _addproductState extends State<addproduct> {
     imageUrl = '';
   }
 
+  void initState() {
+    super.initState();
+    _fetchCurrentUser();
+  }
+
+  void _fetchCurrentUser() async {
+    User? currentUser = auth.currentUser;
+    await currentUser?.reload(); // Reload the user data
+    currentUser = auth.currentUser; // Get the updated user data
+
+    setState(() {
+      _user = currentUser;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +73,6 @@ class _addproductState extends State<addproduct> {
         toolbarHeight: 60,
         backgroundColor: Theme.of(context).primaryColor,
         title: Text('Add Products'),
-        leading: Icon(Icons.arrow_back_ios_new_rounded),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(20),
@@ -86,24 +104,20 @@ class _addproductState extends State<addproduct> {
                       child: Container(
                         height: 140,
                         width: 160,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Theme.of(context).primaryColor, width: 2),
+                            borderRadius: BorderRadius.circular(16)),
                         child: selectedImage == null
-                            ? DottedBorder(
-                                color: Theme.of(context).primaryColor,
-                                strokeWidth: 2,
-                                dashPattern: [10],
-                                borderType: BorderType.RRect,
-                                radius: Radius.circular(14),
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Icon(Icons.camera_alt_rounded, size: 50, color: Colors.grey,),
-                                      Text('Select Image',
-                                        style: TextStyle(color: Colors.grey, fontSize: 14, fontWeight: FontWeight.bold,),),
-                                    ],
-                                  ),
-                                ),
-                              )
+                            ? Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Icon(Icons.camera_alt_rounded, size: 50, color: Colors.grey,),
+                                  Text('Select Image',
+                                    style: TextStyle(color: Colors.grey, fontSize: 14, fontWeight: FontWeight.bold,),),
+                                ],
+                              ),
+                            )
                             : ClipRRect(
                                 borderRadius: BorderRadius.circular(14),
                                 child: Image.file(selectedImage!, width: 160, height: 140, fit: BoxFit.cover,),
@@ -386,6 +400,7 @@ class _addproductState extends State<addproduct> {
                         String itemauctiontimemin = _controllerauctiontimemin.text;
                         String itemauctiontimesec = _controllerauctiontimesec.text;
                         String itemprice = _controllerprice.text;
+                        String itemEmail = _user?.email ?? "test@xyz.com";
 
                         // Upload the selected image to Firebase Storage here
                         String uniqueFileName = DateTime.now().millisecondsSinceEpoch.toString();
@@ -406,6 +421,8 @@ class _addproductState extends State<addproduct> {
                             'time in seconds': itemauctiontimesec,
                             'price': itemprice,
                             'image': imageUrl,
+                            'userEmail':itemEmail,
+
                           };
 
                           // Add a new item
@@ -441,7 +458,6 @@ class _addproductState extends State<addproduct> {
                           : Text('Add Product', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
                     ),
                   )
-
                 ],
               ),
             ),

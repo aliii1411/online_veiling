@@ -134,7 +134,6 @@ class _Edit_MyproState extends State<Edit_Mypro> {
             bottom: Radius.circular(20),
           ),
         ),
-        leading: Icon(Icons.arrow_back_ios_new_rounded),
         title: Text('Edit Products'),
       ),
       body: SafeArea(

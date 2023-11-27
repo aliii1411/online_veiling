@@ -1,19 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
-import 'package:online_veiling/UI_Screens/Addpro_Screen.dart';
-import 'package:online_veiling/UI_Screens/Edit_MyPro_Screen.dart';
+import 'package:online_veiling/UI_Screens/Single_Pro.dart';
 
-
-class My_products extends StatefulWidget {
-  const My_products({super.key});
+class All_Pro extends StatefulWidget {
+  const All_Pro({super.key});
 
   @override
-  State<My_products> createState() => _My_productsState();
+  State<All_Pro> createState() => _All_ProState();
 }
 
-class _My_productsState extends State<My_products> {
+class _All_ProState extends State<All_Pro> {
 
   CollectionReference _referenceupload_products = FirebaseFirestore.instance.collection('products');
   late Stream<QuerySnapshot> _streamupload_products;
@@ -25,18 +22,12 @@ class _My_productsState extends State<My_products> {
       return 0; // Return 0 if parsing fails
     }
   }
-  @override
-
   void initState() {
-    // TODO: implement initState
     super.initState();
-    String? userEmail = FirebaseAuth.instance.currentUser?.email;
-
-    _streamupload_products = _referenceupload_products
-        .where('userEmail', isEqualTo: userEmail)
-        .snapshots();
+    _streamupload_products=_referenceupload_products.snapshots();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -44,20 +35,11 @@ class _My_productsState extends State<My_products> {
         elevation: 0,
         toolbarHeight: 60,
         backgroundColor: Theme.of(context).primaryColor,
-        title: Text('My Products'),
+        title: Text('All Products'),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(20),
           ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        elevation: 0,
-        backgroundColor: Theme.of(context).primaryColor,
-        onPressed: () => Navigator.push(
-            context, MaterialPageRoute(builder: (context) => addproduct())),
-        child: Icon(
-          Icons.add,
         ),
       ),
       body: StreamBuilder<QuerySnapshot>(
@@ -81,6 +63,8 @@ class _My_productsState extends State<My_products> {
               'time in hours': e['time in hours'],
               'time in minutes': e['time in minutes'],
               'time in seconds': e['time in seconds'],
+              'userEmail':e['userEmail'],
+
             }).toList();
           }
           return GridView.builder(
@@ -121,7 +105,7 @@ class _My_productsState extends State<My_products> {
                         style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                       SizedBox(height: 5),
-                       TimerCountdown(
+                      TimerCountdown(
                         enableDescriptions: false,
                         format: CountDownTimerFormat.hoursMinutesSeconds,
                         endTime: DateTime.now().add(
@@ -137,8 +121,9 @@ class _My_productsState extends State<My_products> {
                       ),
                       SizedBox(height: 5),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Pkr ',style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold, fontSize: 16),),
+                          Text('Pkr',style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold, fontSize: 16),),
                           Text(
                             '${thisItem['price']}',
                             style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold, fontSize: 16),
@@ -147,7 +132,7 @@ class _My_productsState extends State<My_products> {
                           InkWell(
                             onTap: () {
                               Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) => Edit_Mypro(
+                                  builder: (context) => Single_Pro(
                                       productId: '${thisItem['id']}',
                                       title: '${thisItem['title']}',
                                       description: '${thisItem['description']}',
@@ -155,7 +140,10 @@ class _My_productsState extends State<My_products> {
                                       auctionTimeMin: '${thisItem['time in minutes']}',
                                       auctionTimeSec: '${thisItem['time in seconds']}',
                                       price: '${thisItem['price']}',
-                                      imageUrl: '${thisItem['image']}')));
+                                      imageUrl: '${thisItem['image']}',
+                                      itemEmail:'${thisItem['userEmail']}',
+
+                                  )));
                             },
                             child: Container(
                               height: 30,
@@ -166,7 +154,7 @@ class _My_productsState extends State<My_products> {
                               ),
                               child: Center(
                                 child: Text(
-                                  "Edit Bid",
+                                  "Bid Now",
                                   style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
                                 ),
                               ),

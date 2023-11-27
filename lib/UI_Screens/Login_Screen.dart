@@ -110,9 +110,12 @@ class _Login_ScreenState extends State<Login_Screen> {
                                       color: Theme.of(context).primaryColor,
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                        borderSide:
-                                        BorderSide(color: Theme.of(context).primaryColor),
+                                        borderSide: BorderSide(color: Theme.of(context).primaryColor),
                                         borderRadius: BorderRadius.circular(10)),
+                                    errorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.red),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
                                     enabledBorder: OutlineInputBorder(
                                         borderSide:
                                         BorderSide(color: Theme.of(context).primaryColor),
@@ -148,9 +151,12 @@ class _Login_ScreenState extends State<Login_Screen> {
                                               ? Icons.visibility_off_outlined
                                               : Icons.visibility_outlined)),
                                       focusedBorder: OutlineInputBorder(
-                                          borderSide:
-                                          BorderSide(color: Theme.of(context).primaryColor),
+                                          borderSide: BorderSide(color: Theme.of(context).primaryColor),
                                           borderRadius: BorderRadius.circular(10)),
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.red),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
                                       enabledBorder: OutlineInputBorder(
                                           borderSide:
                                           BorderSide(color: Theme.of(context).primaryColor),
