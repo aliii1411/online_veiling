@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:online_veiling/UI_Screens/All_Pro.dart';
 import 'package:online_veiling/UI_Screens/Mypro_Screen.dart';
@@ -72,8 +73,11 @@ class _Post_ScreenState extends State<Post_Screen> {
                 InkWell(
                   onTap: () {},
                   child: UserAccountsDrawerHeader(
-                    currentAccountPicture: CircleAvatar(
-                      foregroundImage: AssetImage('assets/profile.png'),
+                    currentAccountPicture: ProfilePicture(
+                      name: _user?.displayName ?? "User Name",
+                      radius: 0,
+                      fontsize: 26,
+                      //random: true,
                     ),
                     accountName: Text(
                       _user?.displayName ?? "User Name",
@@ -437,8 +441,14 @@ class _Post_ScreenState extends State<Post_Screen> {
                                                 width: 175,
                                                 height: 110,
                                                 decoration: BoxDecoration(
-                                                    border: Border.all(color: Theme.of(context).primaryColor, width: 2),
-                                                    borderRadius: BorderRadius.circular(12)),
+                                                    borderRadius: BorderRadius.circular(12),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey.withOpacity(0.3),
+                                                      blurRadius: 7,
+                                                    ),
+                                                  ],
+                                                ),
                                                 child: ClipRRect(
                                                   borderRadius: BorderRadius.circular(10),
                                                   child: Image.network(

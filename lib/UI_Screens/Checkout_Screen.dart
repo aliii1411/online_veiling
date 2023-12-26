@@ -84,8 +84,13 @@ class _Check_outState extends State<Check_out> {
                           children: [
                             Container(
                               decoration: BoxDecoration(
-                                border: Border.all(color: Theme.of(context).primaryColor, width: 2),
                                 borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.3),
+                                    blurRadius: 7,
+                                  ),
+                                ],
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
@@ -133,7 +138,7 @@ class _Check_outState extends State<Check_out> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 13),
+                                SizedBox(height: 7),
                                 Row(
                                   children: [
                                     Text(
@@ -283,6 +288,7 @@ class _Check_outState extends State<Check_out> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15)),
                         onSurface: Colors.transparent,
+                        onPrimary: Colors.white,
                         primary: Theme.of(context).primaryColor,
                       ),
                       onPressed: () {
@@ -297,9 +303,6 @@ class _Check_outState extends State<Check_out> {
                       },
                       child: Center(
                         child:
-                        // loading
-                        //     ? CircularProgressIndicator()
-                        //     :
                         Text('Checkout', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
                       ),
                     )

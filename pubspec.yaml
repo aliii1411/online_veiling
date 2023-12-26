@@ -50,6 +50,7 @@ dependencies:
   flutter_timer_countdown: ^1.0.6
   provider: ^6.1.1
   flutter_stripe: ^9.5.0+1
+  flutter_profile_picture: ^2.0.0
 
 
 dev_dependencies:

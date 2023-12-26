@@ -282,6 +282,7 @@ class _Single_ProState extends State<Single_Pro> {
                     ],
                   ),
                 ),
+                // Users bid where top bids will appear
                 SizedBox(
                   height: 100,
                 ),

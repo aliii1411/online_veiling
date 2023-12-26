@@ -87,8 +87,14 @@ class _All_ProState extends State<All_Pro> {
                         width: 175,
                         height: 110,
                         decoration: BoxDecoration(
-                            border: Border.all(color: Theme.of(context).primaryColor, width: 2),
-                            borderRadius: BorderRadius.circular(12)),
+                            borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.3),
+                              blurRadius: 7,
+                            ),
+                          ],
+                        ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: Image.network(
