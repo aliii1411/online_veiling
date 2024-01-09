@@ -286,7 +286,7 @@ class _Single_ProState extends State<Single_Pro> {
                 SizedBox(
                   height: 100,
                 ),
-                RoundButton(title: 'Place Bid',
+                RoundButton(title: 'Checkout',
                   onTap: () {
                     Navigator.push(
                       context,
@@ -296,6 +296,8 @@ class _Single_ProState extends State<Single_Pro> {
                           title: widget.title,
                           authorName: _userName ?? '', // Ensure _userName is not null
                           price: widget.price,
+                          itemEmail: widget.itemEmail,
+                          productId: widget.productId,
                         ),
                       ),
                     );

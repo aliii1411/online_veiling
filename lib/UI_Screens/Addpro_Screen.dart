@@ -242,7 +242,7 @@ class _addproductState extends State<addproduct> {
                                 ),
                                 SizedBox(width: 10,),
                                 SizedBox(
-                                  width: 51,
+                                  width: 52,
                                   child: TextFormField(
                                     controller: _controllerauctiontimemin,
                                     decoration: InputDecoration(
@@ -455,7 +455,7 @@ class _addproductState extends State<addproduct> {
                       child:
                       loading // Show a CircularProgressIndicator when loading is true
                           ? CircularProgressIndicator()
-                          : Text('Add Product', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+                          : Text('Add Product', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18,color: Colors.white),),
                     ),
                   )
                 ],

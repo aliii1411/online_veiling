@@ -52,12 +52,13 @@ class _My_productsState extends State<My_products> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        elevation: 0,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
         backgroundColor: Theme.of(context).primaryColor,
         onPressed: () => Navigator.push(
             context, MaterialPageRoute(builder: (context) => addproduct())),
         child: Icon(
           Icons.add,
+          color: Colors.white,
         ),
       ),
       body: StreamBuilder<QuerySnapshot>(

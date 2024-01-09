@@ -2,16 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Check_out extends StatefulWidget {
+  final String productId;
   final String imageUrl;
   final String title;
   final String authorName;
   final String price;
+  final String itemEmail;
 
   const Check_out({
+    required this.productId,
     required this.imageUrl,
     required this.title,
     required this.authorName,
     required this.price,
+    required this.itemEmail,
   });
 
   @override
@@ -25,15 +29,22 @@ class _Check_outState extends State<Check_out> {
   TextEditingController _bidAmountController = TextEditingController();
   TextEditingController _fullNameController = TextEditingController();
   TextEditingController _contactController = TextEditingController();
+  TextEditingController _addressController = TextEditingController();
 
-  void _submitBid(String bidAmount, String fullName, String contact) {
+  void _submitBid(String bidAmount, String fullName, String contact, String address,) {
     FirebaseFirestore.instance.collection('Bids').add({
+      'itemEmail': widget.itemEmail,
+      'productId': widget.productId,
+      'image' :widget.imageUrl,
+      'title' : widget.title,
+      'price' : widget.price,
       'bidAmount': bidAmount,
       'fullName': fullName,
       'contact': contact,
+      'address': address,
     }).then((value) {
       // Handle success
-      print('Bid added to Firestore');
+      print('Bid added to Firestore with productId: ${widget.productId}');
     }).catchError((error) {
       // Handle error
       print('Error adding bid to Firestore: $error');
@@ -182,11 +193,12 @@ class _Check_outState extends State<Check_out> {
                       keyboardType: TextInputType.number,
                       controller: _bidAmountController,
                       decoration: InputDecoration(
-                          suffixText: 'Pkr',
+                          suffixText: 'PKR',
+                          suffixStyle: TextStyle(color: Theme.of(context).primaryColor,fontWeight: FontWeight.w600,fontSize: 16),
                           floatingLabelBehavior: FloatingLabelBehavior.always,
                           isDense: true,
                           hintText: 'Amount',
-                          hintStyle: TextStyle(color: Colors.grey),
+                          hintStyle: TextStyle(color: Colors.grey,),
                           fillColor: Theme.of(context).scaffoldBackgroundColor,
                           filled: true,
                           focusedBorder: OutlineInputBorder(
@@ -194,8 +206,10 @@ class _Check_outState extends State<Check_out> {
                               borderRadius: BorderRadius.circular(10)),
                           errorBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.red),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+                            borderRadius: BorderRadius.circular(10)),
+                          focusedErrorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red),
+                              borderRadius: BorderRadius.circular(10)),
                           enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                   color: Theme.of(context).primaryColor),
@@ -205,23 +219,16 @@ class _Check_outState extends State<Check_out> {
                         if (value == null || value.isEmpty) {
                           return 'Please enter the item name';
                         }
-
-                        // Convert the entered value to a double
                         double enteredAmount = double.tryParse(value) ?? 0;
-
-                        // Convert widget.price to a double
                         double productPrice = double.tryParse(widget.price) ?? 0;
-
-                        // Check if enteredAmount is greater than or equal to productPrice
                         if (enteredAmount < productPrice) {
-                          return 'Bid amount must be equal or greater than the product price';
+                          return 'Amount must be equal or greater than the product price';
                         }
-
                         return null;
                       },
                     ),
                     SizedBox(height: 15,),
-                    Text('User Info', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                    Text('Shipping Details', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
                     SizedBox(height: 5,),
                     TextFormField(
                       keyboardType: TextInputType.name,
@@ -280,6 +287,36 @@ class _Check_outState extends State<Check_out> {
                         return null;
                       },
                     ),
+                    SizedBox(height: 10,),
+                    TextFormField(
+                      keyboardType: TextInputType.streetAddress,
+                      controller: _addressController,
+                      maxLines: 3,
+                      decoration: InputDecoration(
+                          isDense: true,
+                          hintText: 'Shipping Address',
+                          hintStyle: TextStyle(color: Colors.grey),
+                          fillColor: Theme.of(context).scaffoldBackgroundColor,
+                          filled: true,
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                              borderRadius: BorderRadius.circular(10)),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColor),
+                              borderRadius: BorderRadius.circular(10))),
+
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter the item name';
+                        }
+                        return null;
+                      },
+                    ),
                     SizedBox(height: 100,),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -298,12 +335,21 @@ class _Check_outState extends State<Check_out> {
                             _bidAmountController.text,
                             _fullNameController.text,
                             _contactController.text,
+                            _addressController.text,
+
                           );
+                          _bidAmountController.clear();
+                          _fullNameController.clear();
+                          _contactController.clear();
+                          _addressController.clear();
+
+                          // Navigate back to the home screen
+                          Navigator.pop(context);
                         }
                       },
                       child: Center(
                         child:
-                        Text('Checkout', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+                        Text('Place Bid', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
                       ),
                     )
                   ],

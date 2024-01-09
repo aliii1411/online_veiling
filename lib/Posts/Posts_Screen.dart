@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:online_veiling/UI_Screens/All_Pro.dart';
+import 'package:online_veiling/UI_Screens/Mybids_Screen.dart';
 import 'package:online_veiling/UI_Screens/Mypro_Screen.dart';
 import 'package:online_veiling/UI_Screens/Regist_Screen.dart';
 import 'package:online_veiling/UI_Screens/Single_Pro.dart';
@@ -142,7 +143,10 @@ class _Post_ScreenState extends State<Post_Screen> {
                             ),
                           ),
                           onTap: () {
-
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => All_Pro()));
                           },
                         ),
                         ListTile(
@@ -180,7 +184,12 @@ class _Post_ScreenState extends State<Post_Screen> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Mybids_Screen()));
+                          },
                         ),
                         ListTile(
                           minLeadingWidth: 10,
