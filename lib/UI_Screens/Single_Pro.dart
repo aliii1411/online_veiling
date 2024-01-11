@@ -298,6 +298,9 @@ class _Single_ProState extends State<Single_Pro> {
                           price: widget.price,
                           itemEmail: widget.itemEmail,
                           productId: widget.productId,
+                          auctionTimeHr: widget.auctionTimeHr,
+                          auctionTimeMin: widget.auctionTimeMin,
+                          auctionTimeSec: widget.auctionTimeSec,
                         ),
                       ),
                     );

@@ -293,24 +293,6 @@ class _Post_ScreenState extends State<Post_Screen> {
                                     SizedBox(
                                       height: 10,
                                     ),
-                                    // Row(
-                                    //   mainAxisAlignment:
-                                    //       MainAxisAlignment.spaceBetween,
-                                    //   children: [
-                                    //     Text(
-                                    //       'Popular Auctions',
-                                    //       style: TextStyle(
-                                    //           fontSize: 20,
-                                    //           fontWeight: FontWeight.bold),
-                                    //     ),
-                                    //     Text(
-                                    //       'view all',
-                                    //       style: TextStyle(
-                                    //         fontSize: 16,
-                                    //       ),
-                                    //     )
-                                    //   ],
-                                    // ),
                                   ],
                                 ),
                               ),

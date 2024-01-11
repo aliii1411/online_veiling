@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Check_out extends StatefulWidget {
@@ -8,6 +9,9 @@ class Check_out extends StatefulWidget {
   final String authorName;
   final String price;
   final String itemEmail;
+  final String auctionTimeHr;
+  final String auctionTimeMin;
+  final String auctionTimeSec;
 
   const Check_out({
     required this.productId,
@@ -16,6 +20,9 @@ class Check_out extends StatefulWidget {
     required this.authorName,
     required this.price,
     required this.itemEmail,
+    required this.auctionTimeHr,
+    required this.auctionTimeMin,
+    required this.auctionTimeSec,
   });
 
   @override
@@ -32,12 +39,17 @@ class _Check_outState extends State<Check_out> {
   TextEditingController _addressController = TextEditingController();
 
   void _submitBid(String bidAmount, String fullName, String contact, String address,) {
+    String currentUserEmail = FirebaseAuth.instance.currentUser?.email ?? '';
+
     FirebaseFirestore.instance.collection('Bids').add({
-      'itemEmail': widget.itemEmail,
+      'Email': currentUserEmail,
       'productId': widget.productId,
       'image' :widget.imageUrl,
       'title' : widget.title,
       'price' : widget.price,
+      'auctionTimeHr' : widget.auctionTimeHr,
+      'auctionTimeMin' : widget.auctionTimeMin,
+      'auctionTimeSec' : widget.auctionTimeSec,
       'bidAmount': bidAmount,
       'fullName': fullName,
       'contact': contact,
