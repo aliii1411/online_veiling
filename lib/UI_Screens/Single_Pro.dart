@@ -34,6 +34,7 @@ class Single_Pro extends StatefulWidget {
 class _Single_ProState extends State<Single_Pro> {
 
   var _userName;
+  var _numberOfBids = 0;
 
   Future<String?> getUserName(String email) async {
     try {
@@ -50,6 +51,22 @@ class _Single_ProState extends State<Single_Pro> {
     }
     return null;
   }
+  Future<void> fetchNumberOfBids(String productId) async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('Bids')
+          .where('productId', isEqualTo: productId)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        setState(() {
+          _numberOfBids = querySnapshot.docs.length;
+        });
+      }
+    } catch (e) {
+      print("Error fetching number of bids: $e");
+    }
+  }
 
 
   int parseIntOrZero(String value) {
@@ -65,6 +82,7 @@ class _Single_ProState extends State<Single_Pro> {
     super.initState();
     print("Item Email: ${widget.itemEmail}");
     _fetchUserName();
+    fetchNumberOfBids(widget.productId);
   }
 
 
@@ -247,7 +265,7 @@ class _Single_ProState extends State<Single_Pro> {
                                         ),
                                       ),
                                       Text(
-                                        '20',
+                                        '$_numberOfBids',
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 18,
@@ -294,7 +312,7 @@ class _Single_ProState extends State<Single_Pro> {
                         builder: (context) => Check_out(
                           imageUrl: widget.imageUrl,
                           title: widget.title,
-                          authorName: _userName ?? '', // Ensure _userName is not null
+                          authorName: _userName ?? '',
                           price: widget.price,
                           itemEmail: widget.itemEmail,
                           productId: widget.productId,
@@ -305,7 +323,7 @@ class _Single_ProState extends State<Single_Pro> {
                       ),
                     );
                   },
-                  ),
+                ),
               ],
             ),
           ),
